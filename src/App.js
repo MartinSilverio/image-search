@@ -1,24 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { SWRConfig } from 'swr';
+import axios from 'axios';
+import { requestOptions } from './util/constants';
+import GalleryPage from './pages/gallery/GalleryPage';
+
+import './App.scss';
+
+const fetcher = (url) =>
+  axios.get(url, requestOptions).then((res) => {
+    return res.data.data;
+  });
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <SWRConfig
+      value={{
+        fetcher: fetcher,
+        revalidateOnFocus: false,
+      }}
+    >
+      <div className='App'>
+        <GalleryPage />
+      </div>
+    </SWRConfig>
   );
 }
 
